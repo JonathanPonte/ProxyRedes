@@ -44,6 +44,20 @@ public class Request extends Thread {
 
 		if (!isAllowed(url)) {
 			System.out.println("Acesso a essa pagina não é permitido!");
+			
+			try {
+				BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(client.getOutputStream()));
+				String line = "HTTP/1.0 403 Access Forbidden \n" +
+						"User-Agent: ProxyServer/1.0\n" +				
+						"\r\n";
+				
+				bufferedWriter.write(line);
+				bufferedWriter.flush();		
+				
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			
 		} else {
 
 			if (httpMethod.equals(Constants.CONNECT)) {
@@ -91,12 +105,14 @@ public class Request extends Thread {
 			serverBw = new BufferedWriter(new OutputStreamWriter(server.getOutputStream()));
 			serverBr = new BufferedReader(new InputStreamReader(server.getInputStream()));
 
-			HttpsTransmition serverToClient = new HttpsTransmition(client.getInputStream(),
+			//ida cliente para servidor
+			HttpsTransmition clientToServer = new HttpsTransmition(client.getInputStream(),
 					server.getOutputStream());
 
-			Thread t = new Thread(serverToClient);
+			Thread t = new Thread(clientToServer);
 			t.start();
 
+			//volta servidor para cliente
 			byte[] buffer = new byte[4096];
 			int read = 0;
 
