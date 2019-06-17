@@ -11,18 +11,6 @@ public class ProxyServer extends Thread {
 	private ServerSocket serverSocket;
 	private Boolean isRunning = true;
 
-//	public ProxyServer(int port) {
-//
-//		try {
-//
-//			serverSocket = new ServerSocket(port);
-//			System.out.println("Waiting for client on port " + serverSocket.getLocalPort() + "..");
-//
-//		} catch (IOException se) {
-//			se.printStackTrace();
-//		}
-//
-//	}
 
 	public ProxyServer(int port) {
 		this.port = port;
